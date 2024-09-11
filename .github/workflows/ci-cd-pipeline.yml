@@ -31,7 +31,8 @@ jobs:
         run: docker build -t cicd-pipeline-demo:latest .
 
       - name: Log in to Docker Hub
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/cicd-pipeline-demo
@@ -39,9 +40,9 @@ jobs:
       - name: Deploy to Kubernetes
         uses: azure/k8s-deploy@v3
         with:
-           kubeconfig: ${{ secrets.KUBECONFIG }}
-           manifests: |
-              ./deployment.yaml
-              ./service.yaml
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          manifests: |
+            ./deployment.yaml
+            ./service.yaml
 
 
