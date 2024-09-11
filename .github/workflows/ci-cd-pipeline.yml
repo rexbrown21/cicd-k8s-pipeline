@@ -40,7 +40,7 @@ jobs:
       - name: Set up kubectl
         run: |
           mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG_B64 }}" | base64 --decode > $HOME/.kube/config
           
       - name: Deploy to Kubernetes
         run: |
