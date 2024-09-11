@@ -37,12 +37,14 @@ jobs:
       - name: Push Docker image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/cicd-pipeline-demo:latest
 
+      - name: Set up kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          
       - name: Deploy to Kubernetes
-        uses: azure/k8s-deploy@v3
-        with:
-          kubeconfig: ${{ secrets.KUBECONFIG }}
-          manifests: |
-            ./deployment.yaml
-            ./service.yaml
+        run: |
+          kubectl apply -f ./deployment.yml
+          kubectl apply -f ./service.yml
 
 
